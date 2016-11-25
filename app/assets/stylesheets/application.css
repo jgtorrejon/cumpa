@@ -10,6 +10,13 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+ *= require bootstrap.css
+ *= require AdminLTE/AdminLTE.css
+ *= require skins/skin-green-light.min.css
+ *= require AdminLTE/plugins/morris/morris.css
+ *= require AdminLTE/plugins/datepicker/datepicker3.css
+ *= require AdminLTE/plugins/daterangepicker/daterangepicker.css
+ *= require AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.css
  *= require_tree .
  *= require_self
  */
