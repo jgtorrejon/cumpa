@@ -12,5 +12,16 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap.js
+//= require AdminLTE/plugins/morris/morris.js
+//= require AdminLTE/plugins/sparkline/jquery.sparkline.js
+//= require AdminLTE/plugins/knob/jquery.knob.js
+//= require AdminLTE/plugins/moments/moment.min.js
+//= require AdminLTE/plugins/daterangepicker/daterangepicker.js
+//= require AdminLTE/plugins/datepicker/bootstrap-datepicker.js
+//= require AdminLTE/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.js
+//= require AdminLTE/plugins/slimScroll/jquery.slimscroll.js
+//= require AdminLTE/plugins/fastclick/fastclick.js
+//= require AdminLTE/app.js
 //= require turbolinks
 //= require_tree .
