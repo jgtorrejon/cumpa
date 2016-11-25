@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   get 'home/index'
   get 'home/api_ai'
   root "home#index"
-  mount Messenger::Bot::Space => "/webhook"
+  mount Messenger::Engine, at: "/messenger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
