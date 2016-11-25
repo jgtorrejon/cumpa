@@ -140,7 +140,8 @@
                 .pull-left
                   %a.btn.btn-default.btn-flat{:href => "#"} Profile
                 .pull-right
-                  %a.btn.btn-default.btn-flat{:href => "#"} Sign out
+                  = link_to 'Logout', destroy_user_session_path, method: :delete, :class => "btn btn-default btn-flat"
+                  -# %a.btn.btn-default.btn-flat{:href => "#"} Sign out
           / Control Sidebar Toggle Button
           %li
             %a{"data-toggle" => "control-sidebar", :href => "#"}
