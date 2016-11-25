@@ -1,7 +1,3 @@
--# %h1 Home#index
--# %p Find me in app/views/home/index.html.haml
--#
--# .container
 -#   - if user_signed_in?
 -#     %li= link_to current_user.email, "#"
 -#     %li= link_to 'Logout', destroy_user_session_path, method: :delete
@@ -9,22 +5,9 @@
 -#     %li= link_to "Log in", new_user_session_path
 -#     %li= link_to "Sign up", new_user_registration_path
 -#   %li
-
--# %body.hold-transition.skin-blue.sidebar-mini
-
-.content-wrapper
-  / Content Header (Page header)
-  %section.content-header
-    %h1
-      Page Header
-      %small Optional description
-    %ol.breadcrumb
-      %li
-        %a{:href => "#"}
-          %i.fa.fa-dashboard
-          Level
-      %li.active Here
-  / Main content
-  %section.content
-    / Your Page Content Here
-  / /.content
+%section.content-header
+  %h1
+    Page Header
+    %small Optional description
+%section.content
+  %p Hello world
