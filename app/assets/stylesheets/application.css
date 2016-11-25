@@ -12,7 +12,7 @@
  *
  *= require bootstrap.css
  *= require AdminLTE/AdminLTE.css
- *= require skins/skin-green-light.css
+ *= require skins/skin-green-light.min.css
  *= require AdminLTE/plugins/morris/morris.css
  *= require AdminLTE/plugins/datepicker/datepicker3.css
  *= require AdminLTE/plugins/daterangepicker/daterangepicker.css

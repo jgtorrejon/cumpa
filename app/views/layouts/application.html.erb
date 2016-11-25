@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>AdminLTE 2 | Dashboard</title>
+    <title>Client Boot - BNB</title>
     <%= csrf_meta_tags %>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
@@ -14,8 +14,15 @@
 
 
     <% if user_signed_in? %>
-      <body class="hold-transition skin-blue sidebar-mini">
-      <%= yield %>
+      <body class="hold-transition skin-green-light sidebar-mini">
+        <div class="wrapper">
+          <%= render 'layouts/navbar' %>
+          <%= render 'layouts/sidebar' %>
+          <div class="content-wrapper">
+            <%= yield %>
+          </div>
+          <%= render 'layouts/footer' %>
+        </div>
       </body>
     <% else %>
       <body class="hold-transition login-page">
