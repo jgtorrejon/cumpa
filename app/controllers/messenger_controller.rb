@@ -14,20 +14,23 @@ class MessengerController < Messenger::MessengerController
   def process_response(entry)
     entry.messagings.each do |messaging|
       @user_id=messaging.sender_id
-      if messaging.callback.message?
-        receive_message(messaging.callback)
-      elsif messaging.callback.delivery?
-        puts messaging.callback
-      elsif messaging.callback.postback?
-        receive_postback(messaging.callback)
-      elsif messaging.callback.optin?
-        puts messaging.callback
-      elsif messaging.callback.account_linking?
-        login_or_log_out(messaging.callback)
+      if check_service_bot
+        if messaging.callback.message?
+          receive_message(messaging.callback)
+        elsif messaging.callback.delivery?
+          puts messaging.callback
+        elsif messaging.callback.postback?
+          receive_postback(messaging.callback)
+        elsif messaging.callback.optin?
+          puts messaging.callback
+        elsif messaging.callback.account_linking?
+          login_or_log_out(messaging.callback)
+        end
+        puts Messenger::Client.get_user_profile(messaging.sender_id)
+      else
+        # sent message directly
+        send_directly_message_without_boot(messaging)
       end
-      puts Messenger::Client.get_user_profile(messaging.sender_id)
-
-
       # Messenger::Client.send(
       #     Messenger::Request.new(
       #         Messenger::Elements::Text.new(text: "Echo: #{messaging.callback.text}"),
@@ -36,6 +39,42 @@ class MessengerController < Messenger::MessengerController
       # )
 
     end
+  end
+
+  def check_service_bot
+    facebook_user = Messenger::Client.get_user_profile(@user_id)
+    #create client of find client by sender_id
+    client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+    client.bot_service
+  end
+
+  def send_directly_message_without_boot(messaging)
+
+    if messaging.callback.message?
+      # Received Message
+      unless messaging.callback.text.nil?
+        facebook_user = Messenger::Client.get_user_profile(@user_id)
+        #create client of find client by sender_id
+        client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+        # save message text => from client to bot
+        Message.create(message: messaging.callback.text, client_id: client.id, bot: false)
+      end
+
+    elsif messaging.callback.postback?
+      #receive_postback(messaging.callback)
+
+      facebook_user = Messenger::Client.get_user_profile(@user_id)
+      #create client of find client by sender_id
+      client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+      # save message text => from client to bot
+      Message.create(message: essaging.callback.payload, client_id: client.id, bot: false)
+
+    elsif messaging.callback.account_linking?
+      puts messaging.callback
+    end
+    # puts Messenger::Client.get_user_profile(messaging.sender_id)
+
+
   end
 
   def receive_message(message)
@@ -88,7 +127,9 @@ class MessengerController < Messenger::MessengerController
         #save boot message
         client = Client.where(sender_id: @user_id).first
         Message.create(message: response, client_id: client.id, bot: true, user_id: 1)
-        # trigger => NOTICE TO USER TO CHECK MESSAGE
+
+        client.bot_service = false
+        client.save
         request_base(Messenger::Elements::Text.new(text: response))
       when "FAQS_GET_CARD"
         # save response text => from bot to client
@@ -158,10 +199,37 @@ class MessengerController < Messenger::MessengerController
         request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
       when "STATUS_OF_PROCEDURES"
-
+        #el nro de documento
       when "SEE_BALANCE"
-
-
+        # verificar si esta logueado
+        if self.middleware_login
+          request_base(Messenger::Elements::Text.new(text: response_text+": Bs"+@client.balance.to_s))
+        else
+          body_request={
+              :recipient => {:id => @user_id},
+              "message" => {
+                  "attachment" => {
+                      "type" => "template",
+                      "payload" => {
+                          "template_type" => "generic",
+                          "elements" => [{
+                                             "title" => "Bienvenido al BNB",
+                                             "image_url" => "http://boliviaemprende.com/wp-content/uploads/2015/03/banconacionaldeboliviaBNB.jpg",
+                                             "buttons" => [{
+                                                               "type": "account_link",
+                                                               "url": "https://test-json-facebook.herokuapp.com/authorize"
+                                                           }]
+                                         }]
+                      }
+                  }
+              }
+          }
+          header_request={
+              "Content-Type" => "application/json"
+          }
+          url="https://graph.facebook.com/v2.6/me/messages?access_token="+Messenger.config.page_access_token
+          create_request(url, body_request, header_request)
+        end
     end
   end
 
@@ -336,17 +404,22 @@ class MessengerController < Messenger::MessengerController
   end
 
   def login_or_log_out(account_linked)
-    puts account_linked.status
+    client=Client.find_by(sender_id: @user_id)
+    client.logged
     if account_linked.status=="unlinked"
       #change attribute logger to 0
+      client.logged=false
+      client.save!
     else
       #change attribute logger to 1
+      client.logged=true
+      client.save!
     end
   end
 
   def middleware_login
-    #boolean if user is login
-    true
+    @client=Client.find_by(sender_id: @user_id)
+    @client.logged
   end
 
 end
