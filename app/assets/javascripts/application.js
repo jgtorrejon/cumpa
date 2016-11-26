@@ -14,6 +14,9 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require bootstrap.js
+//= require dashboard/highchart
+//= require dashboard/highchart-3d
+//= require dashboard/highchart-export
 //= require AdminLTE/plugins/morris/morris.js
 //= require AdminLTE/plugins/sparkline/jquery.sparkline.js
 //= require AdminLTE/plugins/knob/jquery.knob.js

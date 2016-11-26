@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   get 'home/bot_assistant_chat'
   get 'home/client_chat'
 
-  root "home#index"
+  get 'dashboard/index'
+
+  root "dashboard#index"
   mount Messenger::Engine, at: "/messenger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
