@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161126044323) do
+ActiveRecord::Schema.define(version: 20161126093535) do
 
   create_table "clients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20161126044323) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "client_id"
+    t.boolean  "bot"
     t.index ["client_id"], name: "index_messages_on_client_id", using: :btree
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end

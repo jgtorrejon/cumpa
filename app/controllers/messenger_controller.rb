@@ -23,6 +23,8 @@ class MessengerController < Messenger::MessengerController
         puts messaging.callback
       end
       puts Messenger::Client.get_user_profile(messaging.sender_id)
+
+
       # Messenger::Client.send(
       #     Messenger::Request.new(
       #         Messenger::Elements::Text.new(text: "Echo: #{messaging.callback.text}"),
@@ -36,6 +38,7 @@ class MessengerController < Messenger::MessengerController
   def receive_message(message)
     unless message.text.nil?
       model_response=send_to_api_ai(message.text)
+      # save message text => from client to bot
       command_response= model_response[:result][:action] # accion
       message_response= model_response[:result][:fulfillment][:speech] #respuesta
       puts message_response
@@ -48,6 +51,7 @@ class MessengerController < Messenger::MessengerController
   end
 
   def receive_postback(command)
+    # save postback from client to bot
     clasify_postback(command.payload)
   end
 
@@ -69,6 +73,7 @@ class MessengerController < Messenger::MessengerController
     case command
       when "FAQS_GET_CARD"
         request_base(Messenger::Elements::Text.new(text: response_text))
+        # save response text => from bot to client
       when "FAQS_OPEN_ACCOUNT"
         request_base(Messenger::Templates::Buttons.new(
             text: response_text,
@@ -77,6 +82,7 @@ class MessengerController < Messenger::MessengerController
                 Messenger::Elements::Button.new(type: 'postback', title: 'Natural', value: 'FAQS_OPEN_ACCOUNT_NATURAL')
             ]
         ))
+        # save response text => from bot to client
     end
   end
   def clasify_postback(command)
