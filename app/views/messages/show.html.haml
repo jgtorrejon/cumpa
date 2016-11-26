@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Message:
+  = @message.message
+%p
+  %b Fb message:
+  = @message.fb_message_id
+%p
+  %b User:
+  = @message.user
+
+= link_to 'Edit', edit_message_path(@message)
+\|
+= link_to 'Back', messages_path

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :messages
+  resources :clients
   devise_for :users
   get 'home/index'
   get 'home/api_ai'
