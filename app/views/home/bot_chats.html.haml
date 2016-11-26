@@ -44,8 +44,21 @@
                 %td 14:00 10-7-2014
                 %td Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
 
+  -#myModal.modal.fade{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1"}
+    .modal-dialog{:role => "document"}
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4#myModalLabel.modal-title Conversación
+        .modal-body
+          \...
+        .modal-footer
+          %button.btn.btn-primary{"data-dismiss" => "modal", :type => "button"} Close
+
+
 
 :javascript
-  $("#tbody").on("click", "tr", function() {
-     alert($( this ).text());
-   });
+  //$("#tbody").on("click", "tr", function() {
+  //  $('#myModal').modal('show');
+  // });
