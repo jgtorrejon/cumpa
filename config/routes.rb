@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get 'home/bot_chats'
   get 'home/bot_assistant_chat'
+  get 'home/client_chat'
 
   root "home#index"
   mount Messenger::Engine, at: "/messenger"
