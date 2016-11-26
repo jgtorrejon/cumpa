@@ -35,10 +35,10 @@ ActiveRecord::Schema.define(version: 20161126155812) do
   create_table "credit_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "description"
     t.string   "sender_id"
-    t.integer  "clients_id"
+    t.integer  "client_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
-    t.index ["clients_id"], name: "index_credit_statuses_on_clients_id", using: :btree
+    t.index ["client_id"], name: "index_credit_statuses_on_client_id", using: :btree
   end
 
   create_table "exchange_rates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 20161126155812) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  add_foreign_key "credit_statuses", "clients", column: "clients_id"
+  add_foreign_key "credit_statuses", "clients"
   add_foreign_key "messages", "clients"
   add_foreign_key "messages", "users"
 end
