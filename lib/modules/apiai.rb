@@ -10,7 +10,7 @@ module Apiai
   # end
   #
   # def send_response(model=nil)
-  #   client = ApiAiRuby::Client.new(:client_access_token => self.ACCESS_TOKEN)
+    #   client = ApiAiRuby::Client.new(:client_access_token => self.ACCESS_TOKEN)
   #   response = client.text_request messaging.callback.text
   #   # response_api_ai_text= response[:result][:fulfillment][:speech]
   #   Messenger::Client.send(
