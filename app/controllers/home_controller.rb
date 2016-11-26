@@ -21,4 +21,19 @@ class HomeController < ApplicationController
     response = client.text_request 'quiero pizza'
     puts response.to_json
   end
+
+  def authorize
+  @uri=params[:redirect_uri]
+  end
+
+  def before_authorize
+   email= params[:email]
+   password=params[:password]
+   uri_redirect=params[:redirect_uri]
+   authorization_code="12345678"
+   uri_redirect+="?authorization_code="+authorization_code
+   redirect_to uri_redirect
+  end
+
+
 end

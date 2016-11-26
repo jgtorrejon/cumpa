@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   get 'home/client_chat'
 
   root "home#index"
+  get 'home/authorize'
+  post 'home/before_authorize'
   mount Messenger::Engine, at: "/messenger"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

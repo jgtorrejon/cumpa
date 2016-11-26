@@ -101,6 +101,7 @@ class MessengerController < Messenger::MessengerController
         bubble3 = bubble_base_without_image('Seguros', 'Boliviana y Vitalicia')
         request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
 
+
     end
   end
   def clasify_postback(command)
