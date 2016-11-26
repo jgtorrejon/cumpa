@@ -119,7 +119,6 @@ class MessengerController < Messenger::MessengerController
   end
 
   def clasify_messagin(command, response_text)
-    begin
       case command
         when "UNKNOWN"
           #
@@ -132,7 +131,6 @@ class MessengerController < Messenger::MessengerController
           client.save
           request_base(Messenger::Elements::Text.new(text: response))
           # trigger => NOTICE TO USER TO CHECK MESSAGE
-          raise 'UNKNOWN'
         when "FAQS_GET_CARD"
           # save response text => from bot to client
           client = Client.where(sender_id: @user_id).first
@@ -201,11 +199,6 @@ class MessengerController < Messenger::MessengerController
           request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
       end
-    rescue Exception => e
-      respond_to do |format|
-        format.html { redirect_to home_bot_assistant_chat_url, notice: 'Nuevo mensaje de Cliente.' }
-      end
-    end
   end
   def clasify_postback(command)
     case command

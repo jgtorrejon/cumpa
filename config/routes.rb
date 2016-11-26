@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   post 'home/send_message'
 
   get 'dashboard/index'
+  get 'home/solution'
+
 
   root "dashboard#index"
   mount Messenger::Engine, at: "/messenger"
