@@ -11,20 +11,23 @@ class MessengerController < Messenger::MessengerController
   def process_response(entry)
     entry.messagings.each do |messaging|
       @user_id=messaging.sender_id
-      if messaging.callback.message?
-        receive_message(messaging.callback)
-      elsif messaging.callback.delivery?
-        puts messaging.callback
-      elsif messaging.callback.postback?
-        receive_postback(messaging.callback)
-      elsif messaging.callback.optin?
-        puts messaging.callback
-      elsif messaging.callback.account_linking?
-        puts messaging.callback
+      if check_service_bot
+        if messaging.callback.message?
+          receive_message(messaging.callback)
+        elsif messaging.callback.delivery?
+          puts messaging.callback
+        elsif messaging.callback.postback?
+          receive_postback(messaging.callback)
+        elsif messaging.callback.optin?
+          puts messaging.callback
+        elsif messaging.callback.account_linking?
+          puts messaging.callback
+        end
+        puts Messenger::Client.get_user_profile(messaging.sender_id)
+      else
+        # sent message directly
+        send_directly_message_without_boot(messaging)
       end
-      puts Messenger::Client.get_user_profile(messaging.sender_id)
-
-
       # Messenger::Client.send(
       #     Messenger::Request.new(
       #         Messenger::Elements::Text.new(text: "Echo: #{messaging.callback.text}"),
@@ -33,6 +36,44 @@ class MessengerController < Messenger::MessengerController
       # )
 
     end
+  end
+
+  def check_service_bot
+    facebook_user = Messenger::Client.get_user_profile(@user_id)
+    #create client of find client by sender_id
+    client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+    client.bot_service
+  end
+
+  def send_directly_message_without_boot(messaging)
+
+    if messaging.callback.message?
+      # Received Message
+      unless messaging.callback.text.nil?
+        facebook_user = Messenger::Client.get_user_profile(@user_id)
+        #create client of find client by sender_id
+        client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+        # save message text => from client to bot
+        Message.create(message: messaging.callback.text, client_id: client.id, bot:false)
+      end
+
+    elsif messaging.callback.postback?
+      #receive_postback(messaging.callback)
+
+      facebook_user = Messenger::Client.get_user_profile(@user_id)
+      #create client of find client by sender_id
+      client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+      # save message text => from client to bot
+      Message.create(message: essaging.callback.payload, client_id: client.id, bot:false)
+
+    elsif messaging.callback.account_linking?
+      puts messaging.callback
+    end
+    # puts Messenger::Client.get_user_profile(messaging.sender_id)
+
+
+
+
   end
 
   def receive_message(message)
@@ -86,6 +127,8 @@ class MessengerController < Messenger::MessengerController
         client = Client.where(sender_id: @user_id).first
         Message.create(message: response, client_id: client.id, bot:true,user_id: 1)
         # trigger => NOTICE TO USER TO CHECK MESSAGE
+        client.bot_service = false;
+        client.save
         request_base(Messenger::Elements::Text.new(text: response))
       when "FAQS_GET_CARD"
         # save response text => from bot to client
