@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get 'home/authorize'
   post 'home/before_authorize'
   get 'dashboard/index'
+  get 'home/solution'
+
 
   root "dashboard#index"
   mount Messenger::Engine, at: "/messenger"

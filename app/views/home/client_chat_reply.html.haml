@@ -22,7 +22,7 @@
               = message.message
         - else
           .item
-            = image_tag "user4-128x128.jpg", :class => "online"
+            = image_tag "user1-128x128.jpg", :class => "online"
             -# %img.online{:alt => "user image", :src => "dist/img/user4-128x128.jpg"}/
             %p.message
               %a.name{:href => "#"}
@@ -34,6 +34,8 @@
 
       .box-footer
         .input-group
+          = link_to 'Solucionado', home_solution_path(client_id: @client.id)
+        %br
           = form_tag home_send_message_path do
             = hidden_field_tag :client_id, "#{@client.id}", class: 'form-control'
 
