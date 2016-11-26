@@ -119,85 +119,92 @@ class MessengerController < Messenger::MessengerController
   end
 
   def clasify_messagin(command, response_text)
-    case command
-      when "UNKNOWN"
-        #
-        response = "No te entiendo, te paso a mi supervisor, espera un momento"
-        #save boot message
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response, client_id: client.id, bot:true,user_id: 1)
+    begin
+      case command
+        when "UNKNOWN"
+          #
+          response = "No te entiendo, te paso a mi supervisor, espera un momento"
+          #save boot message
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response, client_id: client.id, bot:true,user_id: 1)
 
-        client.bot_service = false;
-        client.save
-        request_base(Messenger::Elements::Text.new(text: response))
-        # trigger => NOTICE TO USER TO CHECK MESSAGE
-      when "FAQS_GET_CARD"
-        # save response text => from bot to client
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response_text, client_id: client.id, bot:true)
-        # send message
-        request_base(Messenger::Elements::Text.new(text: response_text))
+          client.bot_service = false;
+          client.save
+          request_base(Messenger::Elements::Text.new(text: response))
+          # trigger => NOTICE TO USER TO CHECK MESSAGE
+          raise 'UNKNOWN'
+        when "FAQS_GET_CARD"
+          # save response text => from bot to client
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response_text, client_id: client.id, bot:true)
+          # send message
+          request_base(Messenger::Elements::Text.new(text: response_text))
 
-      when "FAQS_OPEN_ACCOUNT"
-        response = "¿Juridico ó Natural?"
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response, client_id: client.id, bot:true)
-        request_base(Messenger::Templates::Buttons.new(
-            text: response_text,
-            buttons: [
-                Messenger::Elements::Button.new(type: 'postback', title: 'Juridico', value: 'FAQS_OPEN_ACCOUNT_JURIDICO'),
-                Messenger::Elements::Button.new(type: 'postback', title: 'Natural', value: 'FAQS_OPEN_ACCOUNT_NATURAL')
-            ]
-        ))
-        # save response text => from bot to client
+        when "FAQS_OPEN_ACCOUNT"
+          response = "¿Juridico ó Natural?"
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response, client_id: client.id, bot:true)
+          request_base(Messenger::Templates::Buttons.new(
+              text: response_text,
+              buttons: [
+                  Messenger::Elements::Button.new(type: 'postback', title: 'Juridico', value: 'FAQS_OPEN_ACCOUNT_JURIDICO'),
+                  Messenger::Elements::Button.new(type: 'postback', title: 'Natural', value: 'FAQS_OPEN_ACCOUNT_NATURAL')
+              ]
+          ))
+          # save response text => from bot to client
 
-      when "EXCHANGE_RATE"
-        exchange = ExchangeRate.first
-        request_base(Messenger::Elements::Text.new(text: response_text))
-        response = "Dolar Venta: " + exchange.buy.to_s
-        response += "\u000A Dolar Compra: " + exchange.sell.to_s
-        response += "\u000A UFV: " + exchange.ufv.to_s
+        when "EXCHANGE_RATE"
+          exchange = ExchangeRate.first
+          request_base(Messenger::Elements::Text.new(text: response_text))
+          response = "Dolar Venta: " + exchange.buy.to_s
+          response += "\u000A Dolar Compra: " + exchange.sell.to_s
+          response += "\u000A UFV: " + exchange.ufv.to_s
 
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response, client_id: client.id, bot:true)
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response, client_id: client.id, bot:true)
 
-        request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
+          request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
-      when "FAQS_BNBNET_ACCESS"
-        response = "Los pasos para la apertura de la cuenta son: (Elementos enviados a messenger)"
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response, client_id: client.id, bot:true)
+        when "FAQS_BNBNET_ACCESS"
+          response = "Los pasos para la apertura de la cuenta son: (Elementos enviados a messenger)"
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response, client_id: client.id, bot:true)
 
-        request_base(Messenger::Elements::Text.new(text: response_text))
+          request_base(Messenger::Elements::Text.new(text: response_text))
 
-        bubble1 = bubble_base('Ingrese la siguiente pagina', 'Vaya a la parte superior derecha',
-                              request.base_url.to_s+'/assets/primero_paso.png')
-        bubble2 = bubble_base('Click en la imagen BNB NET', 'imagen ubicada al centro',
-                              request.base_url.to_s+'/assets/segundo_paso.png')
-        bubble3 = bubble_base('Ingrese su credencial otorgado por el banco', 'No olvidar el recaptcha!!.',
-                              request.base_url.to_s+'/assets/tercer_paso.png')
-        request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
-        when "FAQS_PAYMENTS_SERVICES"
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response_text, client_id: client.id, bot:true)
+          bubble1 = bubble_base('Ingrese la siguiente pagina', 'Vaya a la parte superior derecha',
+                                request.base_url.to_s+'/assets/primero_paso.png')
+          bubble2 = bubble_base('Click en la imagen BNB NET', 'imagen ubicada al centro',
+                                request.base_url.to_s+'/assets/segundo_paso.png')
+          bubble3 = bubble_base('Ingrese su credencial otorgado por el banco', 'No olvidar el recaptcha!!.',
+                                request.base_url.to_s+'/assets/tercer_paso.png')
+          request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
+          when "FAQS_PAYMENTS_SERVICES"
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response_text, client_id: client.id, bot:true)
 
-        request_base(Messenger::Elements::Text.new(text: response_text))
+          request_base(Messenger::Elements::Text.new(text: response_text))
 
-        bubble1 = bubble_base_without_image('Telefonia', 'Viva, Tigo, Entel')
-        bubble2 = bubble_base_without_image('Serv. Basicos', 'Cre, Saguapac')
-        bubble3 = bubble_base_without_image('Seguros', 'Boliviana y Vitalicia')
-        request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
+          bubble1 = bubble_base_without_image('Telefonia', 'Viva, Tigo, Entel')
+          bubble2 = bubble_base_without_image('Serv. Basicos', 'Cre, Saguapac')
+          bubble3 = bubble_base_without_image('Seguros', 'Boliviana y Vitalicia')
+          request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
 
-      when "SMALLER_QUEUE"
-        offices = Office.limit(3).order('quantity_of_people ASC')
-        response = ""
-        offices.each do |office|
-          response += office.name + " : " + office.localization + " : " + office.quantity_of_people.to_s + " personas.\u000A"
-        end
-        client = Client.where(sender_id: @user_id).first
-        Message.create(message: response, client_id: client.id, bot:true)
-        request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
+        when "SMALLER_QUEUE"
+          offices = Office.limit(3).order('quantity_of_people ASC')
+          response = ""
+          offices.each do |office|
+            response += office.name + " : " + office.localization + " : " + office.quantity_of_people.to_s + " personas.\u000A"
+          end
+          client = Client.where(sender_id: @user_id).first
+          Message.create(message: response, client_id: client.id, bot:true)
+          request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
+      end
+    rescue Exception => e
+      respond_to do |format|
+        format.html { redirect_to home_bot_assistant_chat_url, notice: 'Nuevo mensaje de Cliente.' }
+      end
     end
   end
   def clasify_postback(command)
