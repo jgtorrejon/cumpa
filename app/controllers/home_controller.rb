@@ -24,11 +24,11 @@ class HomeController < ApplicationController
 
   def send_message
     message = params[:message]
+    client_id = params[:client_id]
+    sender_id = Client.find(client_id).sender_id
 
-    sender_id = Client.find(params[:client_id]).sender_id
-
-    # client = Client.where(sender_id: @user_id).first
-    # Message.create(message: response_text, client_id: client.id, bot:true)
+    client = Client.where(sender_id: sender_id).first
+    Message.create(message: message, client_id: client.id, bot:true)
 
     request_base(Messenger::Elements::Text.new(text: message),sender_id)
 
@@ -41,7 +41,7 @@ class HomeController < ApplicationController
     client = Client.find(params[:client_id])
     client.bot_service = true;
     if client.save!
-      redirect_to home_bot_chats_path    
+      redirect_to home_bot_chats_path
     end
 
   end
