@@ -28,6 +28,7 @@ db/*.sqlite3
 *.pdf
 .redcar/
 .sass-cache
+.ruby-version
 /config/config.yml
 !pdfs/*.txt
 /coverage.data
