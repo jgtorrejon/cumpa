@@ -126,10 +126,11 @@ class MessengerController < Messenger::MessengerController
         #save boot message
         client = Client.where(sender_id: @user_id).first
         Message.create(message: response, client_id: client.id, bot:true,user_id: 1)
-        # trigger => NOTICE TO USER TO CHECK MESSAGE
+
         client.bot_service = false;
         client.save
         request_base(Messenger::Elements::Text.new(text: response))
+        # trigger => NOTICE TO USER TO CHECK MESSAGE
       when "FAQS_GET_CARD"
         # save response text => from bot to client
         client = Client.where(sender_id: @user_id).first

@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   get 'home/bot_chats'
   get 'home/bot_assistant_chat'
   get 'home/client_chat'
+  get 'home/client_chat_reply'
+  post 'home/send_message'
 
   get 'dashboard/index'
 
