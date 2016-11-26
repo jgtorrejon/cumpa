@@ -12,7 +12,7 @@ listen app_path + '/tmp/unicorn.sock', backlog: 64
 
 # For development, you may want to listen on port 3000 so that you can make sure
 # your unicorn.rb file is soundly configured.
-listen(3000, backlog: 64) if ENV['RAILS_ENV'] == 'production'
+listen(3000, backlog: 64) if ENV['RAILS_ENV'] == 'development'
 
 # After the timeout is exhausted, the unicorn worker will be killed and a new
 # one brought up in its place. Adjust this to your application's needs. The
