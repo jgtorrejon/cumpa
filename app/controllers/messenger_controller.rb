@@ -113,9 +113,17 @@ class MessengerController < Messenger::MessengerController
         response = "Dolar Venta: " + exchange.buy.to_s
         response += "\u000A Dolar Compra: " + exchange.sell.to_s
         response += "\u000A UFV: " + exchange.ufv.to_s
+
+        client = Client.where(sender_id: @user_id).first
+        Message.create(message: response, client_id: client.id, bot:true)
+
         request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
       when "FAQS_BNBNET_ACCESS"
+        response = "Los pasos para la apertura de la cuenta son: (Elementos enviados a messenger)"
+        client = Client.where(sender_id: @user_id).first
+        Message.create(message: response, client_id: client.id, bot:true)
+
         request_base(Messenger::Elements::Text.new(text: response_text))
 
         bubble1 = bubble_base('Ingrese la siguiente pagina', 'Vaya a la parte superior derecha',
@@ -126,6 +134,9 @@ class MessengerController < Messenger::MessengerController
                               request.base_url.to_s+'/assets/tercer_paso.png')
         request_base(Messenger::Templates::Generic.new(elements:[bubble1,bubble2,bubble3]))
         when "FAQS_PAYMENTS_SERVICES"
+        client = Client.where(sender_id: @user_id).first
+        Message.create(message: response_text, client_id: client.id, bot:true)
+
         request_base(Messenger::Elements::Text.new(text: response_text))
 
         bubble1 = bubble_base_without_image('Telefonia', 'Viva, Tigo, Entel')
@@ -158,6 +169,9 @@ class MessengerController < Messenger::MessengerController
         Message.create(message: response_text, client_id: client.id, bot:true)
         request_base(Messenger::Elements::Text.new(text: "Necesitas Documento legal de la empresa y representantes."))
       when "FAQS"
+        response_text = "Preguntas Frecuentes"
+        client = Client.where(sender_id: @user_id).first
+        Message.create(message: response_text, client_id: client.id, bot:true)
         body_request={
             :recipient => {:id =>@user_id},
             :message=> {
