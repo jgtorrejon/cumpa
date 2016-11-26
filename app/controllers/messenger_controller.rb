@@ -199,6 +199,12 @@ class MessengerController < Messenger::MessengerController
         request_base(Messenger::Elements::Text.new(text: response.encode('utf-8')))
 
       when "STATUS_OF_PROCEDURES"
+        request_base(Messenger::Elements::Text.new(text: response_text))
+      when "ID_PROCT"
+        client = Client.find_by(sender_id:@user_id)
+        credit_status=client.credit_status
+        request_base(Messenger::Elements::Text.new(text: response_text))
+        request_base(Messenger::Elements::Text.new(text: credit_status.description))
         #el nro de documento
       when "SEE_BALANCE"
         # verificar si esta logueado
