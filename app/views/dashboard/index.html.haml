@@ -1,0 +1,126 @@
+%section.content-header
+  %h1
+    dashboard
+    %small
+%section.content
+  .row
+    .col-sm-12
+      #line_chart{:style => "width:100%; height:400px;"}
+  .row{:style => "height:10px;"}
+
+  .row
+    .col-sm-6
+      #donut_chart{:style => "width:100%; height:400px;"}
+    .col-sm-6
+      #pie_chart{:style => "width:100%; height:400px;"}
+:javascript
+  $(function () {
+      Highcharts.chart('line_chart', {
+          title: {
+              text: 'Cantidad de usuarios que han tenido contacto con el Robot BNB',
+              x: -20 //center
+          },
+          subtitle: {
+              text: '',
+              x: -20
+          },
+          xAxis: {
+              categories: ['17/Nov', '18/Nov', '19/Nov', '20/Nov',
+                  '21/Nov', '22/Nov', '23/Nov', '24/Nov', '25/Nov', '26/Nov']
+          },
+          yAxis: {
+              title: {
+                  text: 'Cantidad de Usuarios'
+              },
+              plotLines: [{
+                  value: 0,
+                  width: 1,
+                  color: '#808080'
+              }]
+          },
+          tooltip: {
+              valueSuffix: 'Unidad(es)'
+          },
+          legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'middle',
+              borderWidth: 0
+          },
+          series: [{
+              name: 'Robot - Facebook Messenger',
+              data: [7, 6, 9, 14, 18, 21, 25, 26, 23, 18]
+          }, {
+              name: 'Robot - Telegram',
+              data: [0, 0, 5, 11, 17.0, 22.0, 24, 24, 20, 14]
+          }, {
+              name: 'Robot - Twitter',
+              data: [0, 0, 3, 8, 13, 17.0, 18, 17, 14, 9.0]
+          }]
+      });
+  });
+  $(function () {
+    Highcharts.chart('donut_chart', {
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45
+            }
+        },
+        title: {
+            text: 'Las 4 palabras que el Robot no ha entendido'
+        },
+        subtitle: {
+            text: 'Derivandolo a un personal'
+        },
+        plotOptions: {
+            pie: {
+                innerSize: 100,
+                depth: 45
+            }
+        },
+        series: [{
+            name: 'Cantidad',
+            data: [
+                ['Bananas', 8],
+                ['Kiwi', 3],
+                ['Mixed', 1],
+                ['Oranges', 6]
+            ]
+        }]
+    });
+  });
+  $(function () {
+    Highcharts.chart('pie_chart', {
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 45,
+                beta: 0
+            }
+        },
+        title: {
+            text: 'Las palabras mas comunes en conversaciones con el Robot'
+        },
+        plotOptions: {
+            pie: {
+                cursor: 'pointer',
+                depth: 35,
+
+            }
+        },
+        series: [{
+            type: 'pie',
+            name: 'Cantidad',
+            data: [
+                ['Cuenta', 80],
+                ['Credito', 116],
+                ['Saldo', 50],
+                ['Tarjeta', 25],
+                ['Tipo de Cambio', 25]
+            ]
+        }]
+    });
+  });

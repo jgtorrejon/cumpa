@@ -1,15 +1,17 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!, only: [:index,:bot_chats,:bot_assistant_chat]
+  before_action :set_client, only: [:client_chat]
+
   def index
 
   end
 
   def bot_chats
-
+    @clients = Client.all
   end
 
   def bot_assistant_chat
-
+    
   end
 
   def client_chat
@@ -35,5 +37,10 @@ class HomeController < ApplicationController
    redirect_to uri_redirect
   end
 
+
+  private
+  def set_client
+    @client = Client.find(params[:client_id])
+  end
 
 end
