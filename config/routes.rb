@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   get 'home/client_chat_reply'
   post 'home/send_message'
 
-  root "home#index"
+  #root "home#index"
   get 'home/authorize'
   post 'home/before_authorize'
   get 'dashboard/index'
