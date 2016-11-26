@@ -1,0 +1,51 @@
+%section.content-header
+  %h1
+    Boot Assistant Chat
+    %small Description
+%section.content
+  .row
+    .col-xs-12
+      .box
+        .box-header
+          %h3.box-title Conversaciones entre el Robot y un Usuario
+        / /.box-header
+        .box-body.table-responsive.no-padding
+          %table.table.table-hover
+            %thead
+              %tr
+                %th Usuario
+                %th Email
+                %th Teléfono
+                %th Fecha de Último mensaje
+                %th Último mensaje
+            %tbody#tbody
+              %tr
+                %td John Doe
+                %td john@gmail.com
+                %td 76378592
+                %td 14:00 11-7-2014
+                %td Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+              %tr
+                %td Alexander Pierce
+                %td ale@icloud.com
+                %td 284783902
+                %td 12:00 11-7-2014
+                %td Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+              %tr
+                %td Bob Doe
+                %td bob@outlook.com
+                %td 61326223
+                %td 11:00 11-7-2014
+                %td Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+              %tr
+                %td Mike Doe
+                %td mike@yahho.com
+                %td 6389490873
+                %td 14:00 10-7-2014
+                %td Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.
+
+
+:javascript
+  $("#tbody").on("click", "tr", function() {
+     alert($( this ).text());
+   });

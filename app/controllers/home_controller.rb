@@ -1,5 +1,14 @@
 class HomeController < ApplicationController
+  before_action :authenticate_user!, only: [:index,:bot_chats,:bot_assistant_chat]
   def index
+
+  end
+
+  def bot_chats
+
+  end
+
+  def bot_assistant_chat
 
   end
 

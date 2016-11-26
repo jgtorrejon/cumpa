@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require bootstrap.js
 //= require AdminLTE/plugins/morris/morris.js
@@ -23,5 +24,4 @@
 //= require AdminLTE/plugins/slimScroll/jquery.slimscroll.js
 //= require AdminLTE/plugins/fastclick/fastclick.js
 //= require AdminLTE/app.js
-//= require turbolinks
 //= require_tree .
