@@ -12,19 +12,22 @@
 
 ActiveRecord::Schema.define(version: 20161126155812) do
 
-  create_table "clients", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "clients", force: :cascade do |t|
     t.string   "name"
     t.string   "last_name"
     t.string   "picture"
     t.string   "sender_id"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.boolean  "logged",                 default: false
-    t.boolean  "bot_service",            default: true
-    t.float    "balance",     limit: 24
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "logged",      default: false
+    t.boolean  "bot_service", default: true
+    t.float    "balance"
   end
 
-  create_table "commands", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "commands", force: :cascade do |t|
     t.string   "answer"
     t.string   "command"
     t.string   "intent"
@@ -32,7 +35,7 @@ ActiveRecord::Schema.define(version: 20161126155812) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "credit_statuses", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "credit_statuses", force: :cascade do |t|
     t.string   "description"
     t.string   "sender_id"
     t.integer  "client_id"
@@ -41,28 +44,28 @@ ActiveRecord::Schema.define(version: 20161126155812) do
     t.index ["client_id"], name: "index_credit_statuses_on_client_id", using: :btree
   end
 
-  create_table "exchange_rates", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "exchange_rates", force: :cascade do |t|
     t.date     "date"
-    t.float    "sell",       limit: 24
-    t.float    "buy",        limit: 24
-    t.float    "ufv",        limit: 24
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.float    "sell"
+    t.float    "buy"
+    t.float    "ufv"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.text     "message",       limit: 65535
+  create_table "messages", force: :cascade do |t|
+    t.text     "message"
     t.string   "fb_message_id"
     t.integer  "user_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
     t.integer  "client_id"
     t.boolean  "bot"
     t.index ["client_id"], name: "index_messages_on_client_id", using: :btree
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
-  create_table "offices", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "offices", force: :cascade do |t|
     t.string   "localization"
     t.integer  "quantity_of_people"
     t.datetime "created_at",         null: false
@@ -70,7 +73,7 @@ ActiveRecord::Schema.define(version: 20161126155812) do
     t.string   "name"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"

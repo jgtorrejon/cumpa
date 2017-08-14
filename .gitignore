@@ -29,7 +29,7 @@ db/*.sqlite3
 .redcar/
 .sass-cache
 .ruby-version
-/config/config.yml
+#/config/config.yml
 !pdfs/*.txt
 /coverage.data
 /coverage/
@@ -82,8 +82,8 @@ pickle-email-*.html
 .powenv
 
 # Databases .yml
-/config/*.yml
-!/config/*.example.yml
+#/config/*.yml
+#!/config/*.example.yml
 
 # Ignore Byebug command history file.
 .byebug_history
