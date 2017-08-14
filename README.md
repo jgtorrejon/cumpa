@@ -1,3 +1,7 @@
+# Cumpa
+
+This project has the pourpose to manage a messenger bot.
+
 # README
 
 This README would normally document whatever steps are necessary to get the
