@@ -12,7 +12,7 @@ development:
   adapter: postgresql
   encoding: utf8
   reconnect: false
-  database: client_boot_development
+  database: cumpa_development
   pool: 5
   username: postgres
   password: joeljoel
@@ -25,7 +25,7 @@ test:
   adapter: postgres
   encoding: utf8
   reconnect: false
-  database: client_boot_test
+  database: cumpa_test
   pool: 5
   username: postgres
   password: joeljoel
@@ -35,7 +35,7 @@ production:
   adapter: postgres
   encoding: utf8
   reconnect: false
-  database: client_boot_production
+  database: cumpa_production
   pool: 5
   username: postgres
   password: joeljoel
