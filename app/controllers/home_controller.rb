@@ -1,10 +1,10 @@
 class HomeController < ApplicationController
+  # Decorators
   before_action :authenticate_user!, only: [:index,:bot_chats,:bot_assistant_chat,:client_chat,:client_chat_reply]
   before_action :set_client, only: [:client_chat]
   before_action :notification
 
   def index
-
   end
 
   def bot_chats
