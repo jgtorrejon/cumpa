@@ -37,6 +37,6 @@ production:
   reconnect: false
   database: cumpa_production
   pool: 5
-  username: postgres
-  password: joeljoel
+  username: cumpa
+  password: cumpacumpa
   host: localhost
