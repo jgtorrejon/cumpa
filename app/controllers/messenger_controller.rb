@@ -1,4 +1,5 @@
 class MessengerController < Messenger::MessengerController
+  
   def webhook
     # text=params[:entry].first["messaging"].first["message"][:text]
     if params[:entry].first[:messaging].first.key?("message")

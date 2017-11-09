@@ -1,6 +1,9 @@
 class DashboardController < ApplicationController
+
+	# Decorators
   before_action :authenticate_user!
   before_action :notification
+  
   def index
   end
 
