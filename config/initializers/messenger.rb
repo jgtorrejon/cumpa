@@ -7,6 +7,6 @@
 
 # YOUR_APP/config/initializers/messenger.rb
 Messenger.configure do |config|
-  config.verify_token      = 'hackaton_bnb' #will be used in webhook verifiction
-  config.page_access_token = 'EAAKXfG78pMcBAJGzoWgXNm0MfV1NncAl4DFDzF587vlVoYzkbp0kuZBJrbHpyUgLrkcQmZAxZCnWY9YwCt8d82UVoHTFoYZCK1QdAiGqRP68JIQaEqWXj1Eor3gDpireXrv7qAHnmOZBTROuiOEqXOZBcnrkDePTuqZAqTs2qzaRAZDZD'
+  config.verify_token      = 'cumpterextrasexpress' #will be used in webhook verifiction
+  config.page_access_token = 'EAAbZA5E3Ec5MBAMPlL7vM1x0ZAt0b4bhD7FrejwtCZATzRGVksJ8yImL8o8G7PWonOAw5UMUuPYk9fHpOuiR4fry8Twz5Oi0jyUldK68PHrH71Y3ByAd0yezLI7fecCOqhQdrAaeFxwhwnWXIXX5iesCcZACyZCZCz1mex2sN3qIfEHQmEr49U'
 end
