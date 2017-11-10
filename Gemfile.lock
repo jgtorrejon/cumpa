@@ -270,7 +270,7 @@ DEPENDENCIES
   messenger-ruby
   pg (~> 0.18.4)
   puma (~> 3.0)
-  rails (~> 5.0.0, >= 5.0.0.1)
+  rails (= 5.0.0.1)
   rename
   sass-rails (~> 5.0)
   spring
