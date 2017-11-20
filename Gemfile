@@ -65,4 +65,4 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'api-ai-ruby'
 gem 'messenger-ruby'
 gem 'httparty'
-gem 'rename'
+gem 'json'

@@ -1,14 +1,23 @@
 class MessengerController < Messenger::MessengerController
   
+  # Controller when Bot revceive messages
   def webhook
     # text=params[:entry].first["messaging"].first["message"][:text]
-    if params[:entry].first[:messaging].first.key?("message")
-      params[:entry].first[:messaging].first[:message].delete :quick_reply
-    end
+
+    #data_request = JSON.parse(params)
+
+    #puts params
+
+    #debugger
+
+    #if params[:entry].first[:messaging].first.key?("message")
+    #  params[:entry].first[:messaging].first[:message].delete :quick_reply
+    #end
 
     fb_params.entries.each do |entry|
       process_response(entry)
     end
+    
     render nothing: true, status: 200
   end
 
