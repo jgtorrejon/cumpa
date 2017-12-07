@@ -1,55 +1,54 @@
 class MessengerController < Messenger::MessengerController
   
-  # Controller when Bot revceive messages
-  def webhook
-    # text=params[:entry].first["messaging"].first["message"][:text]
-
-    #data_request = JSON.parse(params)
-
-    #puts params
-
-    #debugger
-
-    #if params[:entry].first[:messaging].first.key?("message")
-    #  params[:entry].first[:messaging].first[:message].delete :quick_reply
-    #end
-
-    fb_params.entries.each do |entry|
-      process_response(entry)
-    end
-    
-    render nothing: true, status: 200
-  end
-
-  def process_response(entry)
-    entry.messagings.each do |messaging|
-      @user_id=messaging.sender_id
-      if check_service_bot
-        if messaging.callback.message?
-          receive_message(messaging.callback)
-        elsif messaging.callback.delivery?
-          puts messaging.callback
-        elsif messaging.callback.postback?
-          receive_postback(messaging.callback)
-        elsif messaging.callback.optin?
-          puts messaging.callback
-        elsif messaging.callback.account_linking?
-          login_or_log_out(messaging.callback)
+    # Controller when Bot revceive messages from Messenger.
+    # Params: 
+    # - params: By default this method receive all request params.
+    def webhook
+        # Process all entry messages.
+        fb_params.entries.each do |entry|
+            process_response(entry)
         end
-        puts Messenger::Client.get_user_profile(messaging.sender_id)
-      else
-        # sent message directly
-        send_directly_message_without_boot(messaging)
-      end
-      # Messenger::Client.send(
-      #     Messenger::Request.new(
-      #         Messenger::Elements::Text.new(text: "Echo: #{messaging.callback.text}"),
-      #         messaging.sender_id
-      #     )
-      # )
-
+        # Return status ok, 200
+        head :ok
     end
-  end
+
+    private
+
+    # Method to clasify all receive messages.
+    # Params:
+    # - entry: A list with all pending messenger messages.
+    def process_response(entry)
+        entry.messagings.each do |messaging|
+            set_sender(messaging.sender_id)
+            
+            if check_service_bot
+                """if messaging.callback.message?
+                  receive_message(messaging.callback)
+                elsif messaging.callback.delivery?
+                  puts messaging.callback
+                elsif messaging.callback.postback?
+                  receive_postback(messaging.callback)
+                elsif messaging.callback.optin?
+                  puts messaging.callback
+                elsif messaging.callback.account_linking?
+                  login_or_log_out(messaging.callback)
+                end
+                puts Messenger::Client.get_user_profile(messaging.sender_id)"""
+                puts "check_service_bot => true"
+            else
+                # sent message directly
+                #send_directly_message_without_boot(messaging)
+                puts "check_service_bot => false"
+            end
+        end
+    end
+
+    # Methods to set an global variable to work with it.
+    # Params:
+    # - sender_id: Id from messenger user sender.
+    def set_sender(sender_id)
+        @sender_id = sender_id
+    end
 
   def check_service_bot
     facebook_user = Messenger::Client.get_user_profile(@user_id)
@@ -126,7 +125,7 @@ class MessengerController < Messenger::MessengerController
   end
 
   def ACCESS_TOKEN
-    '5d8413c5badb49b4969a6e70a9d65edb' #todo new struct by joel
+    '74d84308fb5a4bc795ab17b87c46e0e5' 
   end
 
   def clasify_messagin(command, response_text)
