@@ -21,7 +21,8 @@ class MessengerController < Messenger::MessengerController
         entry.messagings.each do |messaging|
             set_sender(messaging.sender_id)
             
-            if check_service_bot
+            # TODO
+            if bot_service?
                 """if messaging.callback.message?
                   receive_message(messaging.callback)
                 elsif messaging.callback.delivery?
@@ -43,19 +44,25 @@ class MessengerController < Messenger::MessengerController
         end
     end
 
-    # Methods to set an global variable to work with it.
+    # Method to set an global variable to work with it.
     # Params:
     # - sender_id: Id from messenger user sender.
     def set_sender(sender_id)
         @sender_id = sender_id
     end
 
-  def check_service_bot
-    facebook_user = Messenger::Client.get_user_profile(@user_id)
-    #create client of find client by sender_id
-    client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
-    client.bot_service
-  end
+    # Method to check if user is talking with a bot or a human.
+    # Params:
+    # - @sender_id: Is a global variable to has the sender/customer. 
+    def bot_service?
+        # First we extract all customer sender information.
+        facebook_user = Messenger::Client.get_user_profile(@sender_id)
+        puts facebook_user
+        debugger
+        #create client of find client by sender_id
+        client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+        client.bot_service
+    end
 
   def send_directly_message_without_boot(messaging)
 
