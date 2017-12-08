@@ -86,6 +86,9 @@ GEM
     domain_name (0.5.20161021)
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
+    exception_notification (4.2.2)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     execjs (2.7.0)
     ffi (1.9.14)
     globalid (0.3.7)
@@ -125,6 +128,7 @@ GEM
     jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
+    json (1.8.3)
     kgio (2.10.0)
     listen (3.0.8)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -257,16 +261,18 @@ DEPENDENCIES
   capistrano3-puma (= 3.1.1)
   coffee-rails (~> 4.2)
   devise
+  exception_notification
   haml-rails (~> 0.9)
   httparty
   jbuilder (~> 2.5)
   jquery-rails
   jquery-turbolinks (~> 2.1)
+  json
   listen (~> 3.0.5)
   messenger-ruby
   pg (~> 0.18.4)
   puma (~> 3.0)
-  rails (~> 5.0.0, >= 5.0.0.1)
+  rails (= 5.0.0.1)
   sass-rails (~> 5.0)
   spring
   spring-watcher-listen (~> 2.0.0)

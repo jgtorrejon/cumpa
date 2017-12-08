@@ -12,23 +12,22 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
-
-    <% if user_signed_in? %>
-      <body class="hold-transition skin-green-light sidebar-mini">
-        <div class="wrapper">
-          <%= render 'layouts/navbar' %>
-          <%= render 'layouts/sidebar' %>
-          <div class="content-wrapper">
-            <%= yield %>
-          </div>
-          <%= render 'layouts/footer' %>
+  <% if user_signed_in? %>
+    <body class="hold-transition skin-green-light sidebar-mini">
+      <div class="wrapper">
+        <%= render 'layouts/navbar' %>
+        <%= render 'layouts/sidebar' %>
+        <div class="content-wrapper">
+          <%= yield %>
         </div>
-      </body>
-    <% else %>
-      <body class="hold-transition login-page">
-      <%= yield %>
-      </body>
-    <% end %>
+        <%= render 'layouts/footer' %>
+      </div>
+    </body>
+  <% else %>
+    <body class="hold-transition login-page">
+    <%= yield %>
+    </body>
+  <% end %>
     <!-- <p class="notice"><%= notice %></p>
     <p class="alert"><%= alert %></p> -->
 </html>

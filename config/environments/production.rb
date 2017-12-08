@@ -83,4 +83,33 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+
+
+
+  # ActionMailer Config
+  config.action_mailer.default_url_options = { host: 'cumpa.ml' }
+
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+      user_name: 'jgtorrejon93@gmail.com',
+      password: 'jgtorrejon',
+      domain: 'gmail.com',
+      address: 'smtp.gmail.com',
+      port:  '587',
+      authentication: :plain,
+      enable_starttls_auto: true
+  }
+
+
+  # Set notifier gem
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+    :email => {
+      :deliver_with => :deliver,
+      :email_prefix => "[PRODUCTION CUMPA.ML]",
+      :sender_address => %{"notifier" jgtorrejon93@gmail.com},
+      :exception_recipients => %w{joel.remanente.12@gmail.com}
+    }
 end
