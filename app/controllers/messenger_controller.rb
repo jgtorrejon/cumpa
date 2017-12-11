@@ -19,27 +19,24 @@ class MessengerController < Messenger::MessengerController
     # - entry: A list with all pending messenger messages.
     def process_response(entry)
         entry.messagings.each do |messaging|
+            # Set global variable Messenger Sender
             set_sender(messaging.sender_id)
-            
-            # TODO
+            # Check if user is available to talk with bot or human.
             if bot_service?
-                """if messaging.callback.message?
-                  receive_message(messaging.callback)
+                if messaging.callback.message?
+                    receive_message(messaging.callback)
                 elsif messaging.callback.delivery?
-                  puts messaging.callback
+                    puts messaging.callback
                 elsif messaging.callback.postback?
-                  receive_postback(messaging.callback)
+                    receive_postback(messaging.callback)
                 elsif messaging.callback.optin?
-                  puts messaging.callback
+                    puts messaging.callback
                 elsif messaging.callback.account_linking?
-                  login_or_log_out(messaging.callback)
+                    login_or_log_out(messaging.callback)
                 end
-                puts Messenger::Client.get_user_profile(messaging.sender_id)"""
-                puts "check_service_bot => true"
+                # puts Messenger::Client.get_user_profile(messaging.sender_id)
             else
-                # sent message directly
-                #send_directly_message_without_boot(messaging)
-                puts "check_service_bot => false"
+                send_directly_message_without_boot(messaging)
             end
         end
     end
@@ -51,66 +48,61 @@ class MessengerController < Messenger::MessengerController
         @sender_id = sender_id
     end
 
-    # Method to check if user is talking with a bot or a human.
+    # Method to check if user is talking with a bot or a human and find client or create if doesn't exists.
     # Params:
     # - @sender_id: Is a global variable to has the sender/customer. 
     def bot_service?
         # First we extract all customer sender information.
-        facebook_user = Messenger::Client.get_user_profile(@sender_id)
-        puts facebook_user
-        debugger
-        #create client of find client by sender_id
-        client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
-        client.bot_service
+        fb_user = Messenger::Client.get_user_profile(@sender_id)
+        client = Client.find_or_create_by(name: fb_user["first_name"], last_name: fb_user["last_name"], picture: fb_user["profile_pic"], sender_id: @sender_id)
+        return client.bot_service
     end
 
-  def send_directly_message_without_boot(messaging)
-
-    if messaging.callback.message?
-      # Received Message
-      unless messaging.callback.text.nil?
-        facebook_user = Messenger::Client.get_user_profile(@user_id)
-        #create client of find client by sender_id
-        client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
-        # save message text => from client to bot
-        Message.create(message: messaging.callback.text, client_id: client.id, bot: false)
-      end
-
-    elsif messaging.callback.postback?
-      #receive_postback(messaging.callback)
-
-      facebook_user = Messenger::Client.get_user_profile(@user_id)
-      #create client of find client by sender_id
-      client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
-      # save message text => from client to bot
-      Message.create(message: essaging.callback.payload, client_id: client.id, bot: false)
-
-    elsif messaging.callback.account_linking?
-      puts messaging.callback
-    end
-    # puts Messenger::Client.get_user_profile(messaging.sender_id)
-
-
-  end
-
-  def receive_message(message)
-    unless message.text.nil?
-      model_response=send_to_api_ai(message.text)
-      # get user from Facebook
-      facebook_user = Messenger::Client.get_user_profile(@user_id)
-      #create client of find client by sender_id
-      client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
-      # save message text => from client to bot
-      Message.create(message: message.text, fb_message_id: message.mid, client_id: client.id, bot: false)
-      command_response= model_response[:result][:action] # accion
-      message_response= model_response[:result][:fulfillment][:speech] #respuesta
-      clasify_messagin(command_response, message_response)
+    # Method to process PLN and send the respond
+    # Params:
+    # - message: This is the message that receive the system.
+    def receive_message(message)
+        unless message.text.nil?
+            model_response = send_to_api_ai(message.text)
+            # get user from Facebook
+            facebook_user = Messenger::Client.get_user_profile(@sender_id)
+            #create client of find client by sender_id
+            client = Client.where(sender_id: @sender_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @sender_id)
+            # save message text => from client to bot
+            Message.create(message: message.text, fb_message_id: message.mid, client_id: client.id, bot: false)
+            command_response= model_response[:result][:action] # accion
+            message_response= model_response[:result][:fulfillment][:speech] #respuesta
+            clasify_messagin(command_response, message_response)
+        end
+        unless message.attachments.nil?
+            puts message.attachments
+        end
     end
 
-    unless message.attachments.nil?
-      puts message.attachments
+    # TODO Doc
+    def send_directly_message_without_boot(messaging)
+        if messaging.callback.message?
+            # Received Message
+            unless messaging.callback.text.nil?
+                facebook_user = Messenger::Client.get_user_profile(@user_id)
+                #create client of find client by sender_id
+                client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+                # save message text => from client to bot
+                Message.create(message: messaging.callback.text, client_id: client.id, bot: false)
+            end
+        elsif messaging.callback.postback?
+            #receive_postback(messaging.callback)
+
+            facebook_user = Messenger::Client.get_user_profile(@user_id)
+            #create client of find client by sender_id
+            client = Client.where(sender_id: @user_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @user_id)
+            # save message text => from client to bot
+            Message.create(message: essaging.callback.payload, client_id: client.id, bot: false)
+        elsif messaging.callback.account_linking?
+            puts messaging.callback
+        end
     end
-  end
+
 
   def receive_postback(command)
     # save postback from client to bot
@@ -127,12 +119,12 @@ class MessengerController < Messenger::MessengerController
   end
 
   def send_to_api_ai(text)
-    client = ApiAiRuby::Client.new(:client_access_token => self.ACCESS_TOKEN)
+    client = ApiAiRuby::Client.new(:client_access_token => ACCESS_TOKEN())
     response = client.text_request text
   end
 
   def ACCESS_TOKEN
-    '74d84308fb5a4bc795ab17b87c46e0e5' 
+    return '74d84308fb5a4bc795ab17b87c46e0e5' 
   end
 
   def clasify_messagin(command, response_text)
@@ -141,7 +133,7 @@ class MessengerController < Messenger::MessengerController
         #
         response = "No te entiendo, te paso a mi supervisor, espera un momento"
         #save boot message
-        client = Client.where(sender_id: @user_id).first
+        client = Client.where(sender_id: @sender_id).first
         Message.create(message: response, client_id: client.id, bot: true, user_id: 1)
 
         client.bot_service = false
@@ -156,7 +148,7 @@ class MessengerController < Messenger::MessengerController
 
       when "FAQS_OPEN_ACCOUNT"
         response = "¿Juridico ó Natural?"
-        client = Client.where(sender_id: @user_id).first
+        client = Client.where(sender_id: @sender_id).first
         Message.create(message: response, client_id: client.id, bot: true)
         request_base(Messenger::Templates::Buttons.new(
             text: response_text,
