@@ -62,22 +62,23 @@ class MessengerController < Messenger::MessengerController
     # Params:
     # - message: This is the message that receive the system.
     def receive_message(message)
-        debugger
+        # Check if user send text.
         if !message.text.nil?
             model_response = send_to_api_ai(message.text)
             # Get user from Facebook
-            facebook_user = Messenger::Client.get_user_profile(@sender_id)
+            fb_user = Messenger::Client.get_user_profile(@sender_id)
             # Create client of find client by sender_id
             client = Client.find_or_create_by(name: fb_user["first_name"], last_name: fb_user["last_name"], picture: fb_user["profile_pic"], sender_id: @sender_id)
             # Save message text from client to bot
             Message.create(message: message.text, fb_message_id: message.mid, client_id: client.id, bot: false)
-            command_response= model_response[:result][:action] # accion
-            message_response= model_response[:result][:fulfillment][:speech] #respuesta
+            command_response = model_response[:result][:action] # accion
+            message_response = model_response[:result][:fulfillment][:speech] #respuesta
             clasify_messagin(command_response, message_response)
         end
-        """if message.attachments.nil?
+        # Check if user send attachments.
+        if message.attachments.nil?
             puts message.attachments
-        end"""
+        end
     end
 
     # Method to return request text PLN proccess to API.AI
@@ -136,7 +137,7 @@ class MessengerController < Messenger::MessengerController
 
   def clasify_messagin(command, response_text)
     case command
-      when "UNKNOWN"
+      when "input.unknown"
         #
         response = "No te entiendo, te paso a mi supervisor, espera un momento"
         #save boot message
@@ -391,7 +392,7 @@ class MessengerController < Messenger::MessengerController
     Messenger::Client.send(
         Messenger::Request.new(
             data,
-            @user_id
+            @sender_id
         )
     )
   end
