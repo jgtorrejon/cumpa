@@ -20,7 +20,7 @@ class MessengerController < Messenger::MessengerController
     def process_response(entry)
         entry.messagings.each do |messaging|
             # Set global variable Messenger Sender
-            set_sender(messaging.sender_id)
+            set_sender_id(messaging.sender_id)
             # Check if user is available to talk with bot or human.
             if bot_service?
                 if messaging.callback.message?
@@ -44,7 +44,7 @@ class MessengerController < Messenger::MessengerController
     # Method to set an global variable to work with it.
     # Params:
     # - sender_id: Id from messenger user sender.
-    def set_sender(sender_id)
+    def set_sender_id(sender_id)
         @sender_id = sender_id
     end
 
@@ -62,22 +62,38 @@ class MessengerController < Messenger::MessengerController
     # Params:
     # - message: This is the message that receive the system.
     def receive_message(message)
-        unless message.text.nil?
+        debugger
+        if !message.text.nil?
             model_response = send_to_api_ai(message.text)
-            # get user from Facebook
+            # Get user from Facebook
             facebook_user = Messenger::Client.get_user_profile(@sender_id)
-            #create client of find client by sender_id
-            client = Client.where(sender_id: @sender_id).first || Client.create(name: facebook_user["first_name"], last_name: facebook_user["last_name"], picture: facebook_user["profile_pic"], sender_id: @sender_id)
-            # save message text => from client to bot
+            # Create client of find client by sender_id
+            client = Client.find_or_create_by(name: fb_user["first_name"], last_name: fb_user["last_name"], picture: fb_user["profile_pic"], sender_id: @sender_id)
+            # Save message text from client to bot
             Message.create(message: message.text, fb_message_id: message.mid, client_id: client.id, bot: false)
             command_response= model_response[:result][:action] # accion
             message_response= model_response[:result][:fulfillment][:speech] #respuesta
             clasify_messagin(command_response, message_response)
         end
-        unless message.attachments.nil?
+        """if message.attachments.nil?
             puts message.attachments
-        end
+        end"""
     end
+
+    # Method to return request text PLN proccess to API.AI
+    # Params:
+    # - text: This is the text that user sends in Messenger
+    def send_to_api_ai(text)
+        client = ApiAiRuby::Client.new(:client_access_token => ACCESS_TOKEN())
+        return client.text_request(text)
+    end
+
+
+    # Method to return API.AI access token
+    def ACCESS_TOKEN
+        return '74d84308fb5a4bc795ab17b87c46e0e5' 
+    end
+
 
     # TODO Doc
     def send_directly_message_without_boot(messaging)
@@ -115,16 +131,7 @@ class MessengerController < Messenger::MessengerController
   end
 
   def api_ai_model(hash_response)
-    model_api_ai= Struct.new(hash_response)
-  end
-
-  def send_to_api_ai(text)
-    client = ApiAiRuby::Client.new(:client_access_token => ACCESS_TOKEN())
-    response = client.text_request text
-  end
-
-  def ACCESS_TOKEN
-    return '74d84308fb5a4bc795ab17b87c46e0e5' 
+    model_api_ai = Struct.new(hash_response)
   end
 
   def clasify_messagin(command, response_text)
