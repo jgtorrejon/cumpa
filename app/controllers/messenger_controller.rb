@@ -65,7 +65,7 @@ class MessengerController < Messenger::MessengerController
         if !message.text.nil?
             model_response = send_to_api_ai(message.text)
             # Save message text from client to bot
-            Message.create(message: message.text, fb_message_id: message.mid, client_id: @customer.sender_id, bot: false)
+            Message.create(message: message.text, fb_message_id: message.mid, client_id: @customer, bot: false)
             command_response = model_response[:result][:action] # accion
             message_response = model_response[:result][:fulfillment][:speech] # respuesta
             clasify_messagin(command_response, message_response)
@@ -136,7 +136,7 @@ class MessengerController < Messenger::MessengerController
                 #
                 response = "No te entiendo, te paso a mi supervisor, espera un momento"
                 #save boot message
-                client = Client.where(sender_id: @sender_id).first
+                client = Client.where(sender_id: @customer.sender_id).first
                 Message.create(message: response, client_id: client.id, bot: true, user_id: 1)
 
                 client.bot_service = false
@@ -337,10 +337,11 @@ class MessengerController < Messenger::MessengerController
                                     "buttons" => [{
                                         "type": "account_unlink",
                                     }]
-                            }
+                            }]
                         }
                     }
-                }
+                }}
+            
                 header_request={
                     "Content-Type" => "application/json"
                 }
@@ -382,7 +383,7 @@ class MessengerController < Messenger::MessengerController
         Messenger::Client.send(
             Messenger::Request.new(
                 data,
-                @sender_id
+                @customer.sender_id
             )
         )
     end
