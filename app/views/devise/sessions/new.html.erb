@@ -1,32 +1,30 @@
 <div class="login-box">
-  <div class="login-logo">
-    <a href="#"><b>Cumpa</b></a>
-  </div>
-  <div class="login-box-body">
-    <p class="login-box-msg">New Session</p>
+    <div class="login-logo">
+        <a href="#"><b>Cumpa</b></a>
+    </div>
+    <div class="login-box-body">
+        <p class="login-box-msg">Nueva Sesion</p>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="form-group has-feedback">
+                <%= f.email_field :email, autofocus: true, placeholder: "Correo electronico", class: "form-control" %>
+            </div>
+            <div class="form-group has-feedback">
+                <%= f.password_field :password, autocomplete: "off", placeholder: "Contraseña", class: "form-control" %>
+            </div>
+            <div class="row">
+                <div class="col-xs-7 col-xs-offset-1">
+                    <% if devise_mapping.rememberable? %>
+                        <div class="checkbox icheck">
+                            <%= f.check_box :remember_me %>
+                            <%= f.label :remember_me %>
+                        </div>
+                    <% end %>
+                </div>
 
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-        <div class="form-group has-feedback">
-          <%= f.email_field :email, autofocus: true, placeholder: "Email", class: "form-control" %>
-        </div>
-        <div class="form-group has-feedback">
-          <%= f.password_field :password, autocomplete: "off", placeholder: "Password", class: "form-control" %>
-        </div>
-        <div class="row">
-          <div class="col-xs-7 col-xs-offset-1">
-            <% if devise_mapping.rememberable? -%>
-              <div class="checkbox icheck">
-                <%= f.check_box :remember_me %>
-                <%= f.label :remember_me %>
-              </div>
-            <% end -%>
-          </div>
-
-          <div class="col-xs-4">
-            <%= f.submit "Log in", class: "btn btn-primary btn-block btn-flat" %>
-          </div>
-        </div>
-      <% end %>
-    <a href="#">I forgot my password</a><br>
-  </div>
+                <div class="col-xs-4">
+                    <%= f.submit "Log in", class: "btn btn-primary btn-block btn-flat" %>
+                </div>
+            </div>
+        <% end %>
+    </div>
 </div>
