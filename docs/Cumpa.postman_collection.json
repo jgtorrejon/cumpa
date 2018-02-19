@@ -1,0 +1,79 @@
+{
+	"info": {
+		"name": "Cumpa",
+		"_postman_id": "f22908bb-11ad-fc34-12fe-d16f66d59650",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "webhook_authenticacion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/messenger/webhook?hub.verify_token=computer-extras-express&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"messenger",
+						"webhook"
+					],
+					"query": [
+						{
+							"key": "hub.verify_token",
+							"value": "computer-extras-express",
+							"equals": true
+						},
+						{
+							"key": "hub.challenge",
+							"value": "CHALLENGE_ACCEPTED",
+							"equals": true
+						},
+						{
+							"key": "hub.mode",
+							"value": "subscribe",
+							"equals": true
+						}
+					]
+				},
+				"description": "Set verification authenticacion webhook"
+			},
+			"response": []
+		},
+		{
+			"name": "send_message",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"object\": \"page\", \n\t\"entry\": [{\n\t\t\"id\": \"1951564331783754\",\n\t\t\"time\": 1511150308749, \n\t\t\"messaging\": [{\n\t\t\t\"timestamp\": 1511150308355, \n\t\t\t\"message\": {\n\t\t\t\t\"text\": \"asdfasdf\", \n\t\t\t\t\"mid\": \"mid.$cAAa0HJ6kzShmCNkUA1f15PLpXbbU\", \n\t\t\t\t\"seq\": 46632\n\t\t\t}, \n\t\t\t\"recipient\": {\n\t\t\t\t\"id\": \"1951564331783754\"\n\t\t\t}, \n\t\t\t\"sender\": {\n\t\t\t\t\"id\": \"1603310093055034\"\n\t\t\t}\n\t\t}]\n\t}]\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/messenger/webhook",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"messenger",
+						"webhook"
+					]
+				},
+				"description": "send message messenger platfform"
+			},
+			"response": []
+		}
+	]
+}

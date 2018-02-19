@@ -87,3 +87,6 @@ pickle-email-*.html
 
 # Ignore Byebug command history file.
 .byebug_history
+
+# Ignore visual code editor files.
+/.vscode

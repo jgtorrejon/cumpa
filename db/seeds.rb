@@ -10,7 +10,7 @@
 User.create(email: 'svonborries@gmail.com', password: 'leo20032007', password_confirmation: 'leo20032007')
 User.create(email: 'bjvtamayo78@gmail.com', password: 'BRANDON10jason', password_confirmation: 'BRANDON10jason')
 User.create(email: 'bpdarlyn@gmail.com', password: 'naciel121293', password_confirmation: 'naciel121293')
-User.create(email: 'joel.remanente.12@gmail.com', password: 'joel123', password_confirmation: 'joel123')
+User.create(email: 'joel@gmail.com', password: 'joel123', password_confirmation: 'joel123')
 
 # setup Offices
 Office.create(name: 'AGENCIA SAN MIGUEL', localization: 'AV. MONTENEGRO Nº 1420, EDIF. SAN MIGUEL ARCÁNGEL, ZONA SAN MIGUEL', quantity_of_people: 50)
