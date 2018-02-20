@@ -24,6 +24,4 @@ module Apiai
   # def ACCESS_TOKEN
   #   '5d8413c5badb49b4969a6e70a9d65edb' #todo new struct by joel
   # end
-
-
 end
